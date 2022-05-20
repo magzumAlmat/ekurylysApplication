@@ -7,7 +7,6 @@ import PhoneInput from "react-phone-number-input";
 import { useUserAuth } from "../context/UserAuthContext";
 
 
-
 const PhoneSignUp = () => {
   const [error, setError] = useState("");
   const [number, setNumber] = useState("");
@@ -16,6 +15,8 @@ const PhoneSignUp = () => {
   const [result, setResult] = useState("");
   const { setUpRecaptha } = useUserAuth();
   const [NumbersDB, setNumbersDB] = useState("");
+  const [OtpDB, setOtpDB] = useState("");
+  
   const navigate = useNavigate();
 
 
@@ -42,6 +43,15 @@ const PhoneSignUp = () => {
       await result.confirm(otp);
       addRecordNumberToDb(otp)
       navigate("/home");
+      
+
+      localStorage.setItem("localStoragePhone", JSON.stringify(number));
+      localStorage.setItem("localStorageOtp", JSON.stringify(otp));
+
+
+      NumberAndCode[number] = otp 
+      console.log('Записанный в бд номер водителя и его код',NumberAndCode)
+
     } catch (err) {
       setError(err.message);
     }
@@ -50,34 +60,96 @@ const PhoneSignUp = () => {
   const NumberAndCode = {}
 
 
-  const signIn = (e) => {
+
+
+
+
+
+
+  const phoneSignIn = async (e) => {
     e.preventDefault();
+    console.log('Я внутри phoneSIGNIN')
+    console.log('otp number',NumbersDB)
+    console.log('otp code',OtpDB)
+
     
-    //if (this.props.otp===""|| this.props.otp === null) return;
-    // try{
+    // console.log('NumberAndCode number',NumberAndCode)
+    // console.log('NumberAndCode code',NumberAndCode)
+  
+    setError("");
+
+    const n=localStorage.getItem('localStoragePhone')
+    const nn = JSON.parse(n);
+    const c=localStorage.getItem('localStorageOtp')
+    const cc = JSON.parse(c);
+    
+    console.log('localStoragePhone number',nn)
+    console.log('localStorageOtp code',cc)
+
+    if (nn === "" || nn === null) return;
+    
+    try {
+      const isEqual = (nn===NumbersDB & cc===OtpDB);
+      console.log(' isEqual ',isEqual)
+        if (isEqual==1) {
+          // const response = await setUpRecaptha(NumbersDB);
+          // setResult(response);
+          // setFlag(true);
+          // await result.confirm(OtpDB);
+          // addRecordNumberToDb(OtpDB)
+          navigate("/home");
+          console.log('Отработался вход по сохраненным логину и паролю')
+        }
+        else{
+        return console.log('NOOOOOOO');
+        }
+
+      // if(NumberAndCode.key===NumbersDB and NumberAndCode.value===OtpDB) 
+      // {
+      // const response = await setUpRecaptha(NumbersDB);
+      // setResult(response);
+      // setFlag(true);
+      // await result.confirm(OtpDB);
+      // addRecordNumberToDb(OtpDB)
+      // navigate("/home");
+      // }
+      // else{}
+  
+    
+    
+    } catch (err) {
+      setError(err.message);
+    }
+    
+
+    // setError("");
+    // if (otp === "" || otp === null) return;
+    // try {
     //   await result.confirm(otp);
-    //   console.log('this is otp',otp)
-    //   console.log('this is code from NumberAndCode','-',NumberAndCode.value)
+    //   addRecordNumberToDb(otp)
+    //   navigate("/home");
     // } catch (err) {
     //   setError(err.message);
-    // }
-    console.log('Я внутри SIGNIN',e)
-    console.log('SignIN')
-    }
-  
+    // }  
+  }
 
-  var val = Math.floor(1000 + Math.random() * 9000);
-  console.log('рандомайз выдал',val);
+  const addRecordNumberToDb = (props,otp) =>{
+    
+    console.log('Я внутри addRecordNumberToDb ')
+    // setNumbersDB(number)
+    
+    
+
+   
+  }
+
+
+
+  // var val = Math.floor(1000 + Math.random() * 9000);
+  // console.log('рандомайз выдал',val);
 
   let NumbersDBB=''
   
-  const addRecordNumberToDb = (otp) =>{
-    console.log('Номер водителя number- ',number)
-    // setNumbersDB(number)
-    NumbersDBB=number
-    NumberAndCode[number] = otp 
-    console.log('Записанный в бд номер водителя',NumberAndCode)
-  }
 
  
   return (
@@ -112,11 +184,12 @@ const PhoneSignUp = () => {
             <Form.Control
               type="otp"
               placeholder="Enter OTP"
-              
               onChange={(e) => setOtp(e.target.value)}
+
 
             />
           </Form.Group>
+
           <div className="button-right">
             <Link to="/">
               <Button variant="secondary">Cancel</Button>
@@ -130,23 +203,55 @@ const PhoneSignUp = () => {
         </Form>
         
 
-       <h2>Войти в систему с имеющимся кодом</h2>
-        <Form onSubmit={signIn} style={{ display: !flag ? "block" : "none" }}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        
+        <h4> SignIN </h4>
+        <h5>Войти в систему с имеющимся кодом</h5>
+       
+       
+      
+       
+       
+       <Form onSubmit={phoneSignIn} >
+      
+       <Form.Group className="mb-3" controlId="sfsdfgd">
+            <PhoneInput
+              defaultCountry="IN"
+              value={NumbersDB}
+              onChange={setNumbersDB}
+              placeholder="Enter Phone Number"
+            />
+            <div id="recaptcha-container"></div>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicOtp">
             <Form.Control
               type="otp"
-              placeholder="Введите ранее вам выданный код "
+              placeholder="Enter your OTP code "
               
               
+              onChange={(e) => setOtpDB(e.target.value)}
 
             />
-            </Form.Group>
-              &nbsp;
-              <Button type="submit" variant="primary" onClick={(e) => signIn(e.target.value)}>
-                Отправить
-              </Button>
+          </Form.Group>
+
+          <div className="button-right">
+            <Link to="/">
+              <Button variant="secondary">Cancel</Button>
+            </Link>
+            &nbsp;
+            {/* <h3>Ваш код {NumbersDB}</h3>
+            <h3>Ваш код {OtpDB}</h3> */}
+            <br/>
            
-          </Form> 
+            <Button type="submit" variant="primary" >
+              PUSH
+            </Button>
+          </div>
+        </Form>
       </div>
     </>
   );

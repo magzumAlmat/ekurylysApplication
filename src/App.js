@@ -7,7 +7,8 @@ import Signup from "./components/Signup";
 import PhoneSignUp from "./components/PhoneSignUp";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
-
+import {db} from './firebase'
+import {collection, addDoc, Timestamp} from 'firebase/firestore'
 function App() {
   return (
     <Container style={{ width: "400px" }}>
