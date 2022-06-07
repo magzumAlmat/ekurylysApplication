@@ -97,11 +97,11 @@ const PhoneSignUp = () => {
           // setFlag(true);
           // await result.confirm(OtpDB);
           // addRecordNumberToDb(OtpDB)
-          navigate("/home");
+          navigate("/home")
           console.log('Отработался вход по сохраненным логину и паролю')
         }
         else{
-        return console.log('NOOOOOOO');
+        return ;
         }
 
       // if(NumberAndCode.key===NumbersDB and NumberAndCode.value===OtpDB) 
