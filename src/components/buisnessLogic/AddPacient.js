@@ -14,22 +14,117 @@ import {
     query,Timestamp
 } from "firebase/firestore";
 import {db} from '../../firebase';
-import BookDataService from "../services/book.services";
+import pacientServices from '../services/pacient.services.';
 import {Button} from "react-bootstrap";
 import { Routes, Route, Outlet, NavLink } from 'react-router-dom';
-function AddPacient({getBookId}) {
+import '../modal/addTask.css'
+import Modal from "../modal/Modal";
+import {
+    Form,
+    Alert,
+    InputGroup,
+    
+    ButtonGroup
+} from "react-bootstrap";
+
+function AddPacient({onClose, open,id}) {
     const [books, setBooks] = useState([]);
+
+    console.log('IM iN ADDBOOK id in this', id)
+
+
     useEffect(() => {
-      getBooks();
-    }, []);
+        console.log("The id here is : ", id);
+        if (id !== undefined && id !== "") {
+            editHandler();
+            getBooks();
+           
+        }
+    }, [id]);
   
     const getBooks = async () => {
-      const data = await BookDataService.getAllBooks();
+      const data = await pacientServices.getAllBooks();
       console.log(data.docs);
       setBooks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
 
+  
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setMessage("");
+        if (Name === "" || LastName === "") {
+            setMessage({error: true, msg: "Заполните Имя и Фамилию"});
+            return;
+        }
+        const newBook = {
+            Name,
+            Age,
+            LastName,
+            Phone,
+            Address,
+            zayavka,
+            zayavkaTime
+
+        };
+        console.log('this is newBook from Addbook',newBook);
+
+        try {
+            console.log('Im in AddBook  id=  ',id)
+            console.log('e target ',e.target.getBookId)
+            if (id !== undefined && id !== "") {
+                console.log('FUNCTION UPDATE STARTED')
+                await pacientServices.updateBook(id, newBook);
+                // setBookId("");
+                
+                setName("");
+                setAge("");
+                setLastName("")
+                setPhone("");
+                setAddress("")
+                setZayavka("")
+                setZayavkaTime("")
+                
+                setMessage({error: false, msg: "Updated successfully!"});
+            } else {
+                await pacientServices.addBooks(newBook);
+                setMessage({error: false, msg: "New Book added successfully!"});
+            }
+        } catch (err) {
+            setMessage({error: true, msg: err.message});
+        }
+
+     
+        setName("");
+        setAge("");
+        setLastName("");
+        setPhone("");
+        setAddress("")
+        setZayavka("")
+        setZayavkaTime("")
+    };
+
+    const editHandler = async () => {
+        setMessage("");
+        try {
+            const docSnap = await pacientServices.getBook(id);
+            console.log("the record is :", docSnap.data());
+          
+           
+            setName(docSnap.data().Name);
+            setAge(docSnap.data().Age);
+            setLastName(docSnap.data().LastName);
+            setPhone(docSnap.data().Phone);
+            setAddress(docSnap.data().Address)
+            setZayavka(docSnap.data().zayavka)
+            setZayavkaTime(docSnap.data().zayavkaTime)
+           
+
+        } catch (err) {
+            setMessage({error: true, msg: err.message});
+        }
+    };
 
     function handleChange(e){
         
@@ -96,9 +191,147 @@ const addTodo = async (e) => {
 
 
 return (
+    
     <>
+{console.log('this is books',books)}
 
-        
+<Modal modalLable='Add Task' onClose={onClose} open={open}>
+    
+    <Form onSubmit={handleSubmit}>
+    <Form.Group className="mb-3" controlId="formBookName">
+                        <InputGroup>
+                            <InputGroup.Text id="formBookName">set Name</InputGroup.Text>
+                            <Form.Control type="text" placeholder="Name"
+                                value={Name}
+                                onChange={
+                                    (e) => setName(e.target.value)
+                                }/>
+                        </InputGroup>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBookAuthor">
+                        <InputGroup>
+                            <InputGroup.Text id="formBookAuthor">Last name</InputGroup.Text>
+                            <Form.Control type="text" placeholder="last name"
+                                value={LastName}
+                                onChange={
+                                    (e) => setLastName(e.target.value)
+                                }/>
+                        </InputGroup>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="">
+                        <InputGroup>
+                            <InputGroup.Text id="formBookAuthor">Phone</InputGroup.Text>
+                            <Form.Control type="text" placeholder="Phone"
+                                value={Phone}
+                                onChange={
+                                    (e) => setPhone(e.target.value)
+                                }/>
+                        </InputGroup>
+                    </Form.Group>
+
+
+                    <Form.Group className="mb-3" controlId="formBookName">
+                        <InputGroup>
+                            <InputGroup.Text id="formBookName">set Age</InputGroup.Text>
+                            <Form.Control type="text" placeholder="Name"
+                                value={Age}
+                                onChange={
+                                    (e) => setAge(e.target.value)
+                                }/>
+                        </InputGroup>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formBookName">
+                        <InputGroup>
+                            <InputGroup.Text id="formBookName">set Address</InputGroup.Text>
+                            <Form.Control type="text" placeholder="Address"
+                                value={Address}
+                                onChange={
+                                    (e) => setAddress(e.target.value)
+                                }/>
+                        </InputGroup>
+                    </Form.Group>
+
+
+                  
+               
+                    <label>
+                        Выберите врача:
+                        <select name="selectedFruit" defaultValue="orange" onChange={handleChange}>
+                        <option value="apple">Apple</option>
+                        <option value="banana">Banana</option>
+                        <option value="orange">Orange</option>
+                       
+                            {books.map((doc, index) => {
+                                return (
+                                    <option value={doc.id}>
+                                    Имя:{doc.Name}
+                                    Фамилия:{doc.LastName} 
+                                    {doc.Age}
+                                    {doc.Phone}
+                                    {doc.Schedule}
+                                    Специализация:{doc.Specialization}
+                                    Статус:{doc.status}
+                                  
+                                </option>
+                                );
+                            })}
+                        
+                        </select>
+                    </label>
+
+
+                    <label>
+                        Выберите Предпочитаемое время:
+                        <select name="selectedFruit2" defaultValue="Выберите время" onChange={handleChange2}>
+                        <option value="10:00-10:30">10:00-10:30</option>
+                        <option value="10:30-11:00">10:30-11:00</option>
+                        <option value="11:30-12:00">11:30-12:00</option>
+                       
+                           
+                        
+                        </select>
+                    </label>
+
+                   
+
+
+                    {/* <ButtonGroup aria-label="Basic example" className="mb-3">
+                        <Button disabled={flag}
+                            variant="success"
+                            onClick={
+                                (e) => {
+                                    setStatus("Available");
+                                    setFlag(true);
+                                }
+                        }>
+                            Available
+                        </Button>
+
+                        <Button variant="danger"
+                            disabled={
+                                !flag
+                            }
+                            onClick={
+                                (e) => {
+                                    setStatus("Not Available");
+                                    setFlag(false);
+                                }
+                        }>
+                            Not Available
+                        </Button>
+                    </ButtonGroup> */}
+                    <div className="d-grid gap-2">
+                        <Button variant="primary" type="Submit">
+                            Add/ Update
+                        </Button>
+                    </div>
+    </Form>
+
+
+
             <input type="text" placeholder="Name"
                 onChange={
                     (e) => setName(e.target.value)
@@ -135,9 +368,7 @@ return (
                                     <option value={doc.id}>
                                     Имя:{doc.name}
                                     Фамилия:{doc.LastName} 
-                                    {/* {doc.Age}
-                                    {doc.Phone}
-                                    {doc.Schedule} */}
+                                   
                                     Специализация:{doc.Specialization}
                                     Статус:{doc.status}
                                   
@@ -160,20 +391,7 @@ return (
                         
                         </select>
                     </label>
-                    {/* <label>
-                        Pick all your favorite vegetables:
-                        <select
-                        name="selectedVegetables"
-                        multiple={true}
-                        defaultValue={['corn', 'tomato']}
-                        >
-                        <option value="cucumber">Cucumber</option>
-                        <option value="corn">Corn</option>
-                        <option value="tomato">Tomato</option>
-                        </select>
-                    </label> */}
-                    <hr />
-                    {/* <button type="reset">Reset</button> */}
+                  
                      
                   
 
@@ -184,11 +402,10 @@ return (
             </Button>
         </div>
         
-        
+        </Modal>
 
         <br/><br/>
-        <p>--------------------exit------------------------------------------------</p>
-
+       
         {/* {books.map((doc, index) => {
             return (
               <tr key={doc.id}>

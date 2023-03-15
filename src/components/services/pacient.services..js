@@ -11,6 +11,8 @@ import {
 } from "firebase/firestore";
 
 const bookCollectionRef = collection(db, "pacients");
+const bookCollectionRefDoctors = collection(db, "doctorsList");
+
 class PacientDataService {
   addBooks = (newBook) => {
     return addDoc(bookCollectionRef, newBook);
@@ -28,6 +30,10 @@ class PacientDataService {
 
   getAllBooks = () => {
     return getDocs(bookCollectionRef);
+  };
+
+  getAllDctors = () => {
+    return getDocs(bookCollectionRefDoctors);
   };
 
   getBook = (id) => {

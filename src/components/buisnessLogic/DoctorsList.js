@@ -3,7 +3,7 @@ import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router";
 import {useUserAuth} from "../../context/UserAuthContext";
 import {Container, Navbar, Row, Col} from "react-bootstrap";
-import '../modal/taskManager.css'
+// import '../modal/taskManager.css'
 
 import {
     collection,
@@ -19,7 +19,6 @@ import {
 } from "firebase/firestore";
 import {db} from '../../firebase';
 import {Routes, Route, Outlet, NavLink} from 'react-router-dom';
-
 import AddPacient from "./AddPacient";
 import AddBook from "./AddBook";
 import bookServices from "../services/book.services";
@@ -45,42 +44,48 @@ const DoctorsList = () => {
             console.log(error.message);
         }
     };
+ 
     return (
-
+      
         <>
             <div className='taskManager__container'>
                 <button onClick={
-                    () => setOpenAddModal(true)
-                }>
+                    () => setOpenAddModal(true)}>
                     Добавить Врача
                 </button>
-
             </div>
 
-            {
-            openAddModal && <AddBook id={bookId}
+        {
+            openAddModal && <AddBook 
+                id={bookId}
                 setBookId={setBookId}
                 onClose={
                     () => setOpenAddModal(false)
                 }
                 open={openAddModal}/>
-        }
+                
+        } 
 
 
-            {/* <Container style={{ width: "400px" }}>
-        <Row>
-          <Col>
-            <AddBook id={bookId} setBookId={setBookId} />
-          </Col>
-        </Row>
-      </Container> */}
+       
             <Container>
+                  
+
+
                 <Row>
                     <Col>
-                        <BooksList getBookId={getBookIdHandler}/>
+                        <BooksList getBookId={getBookIdHandler} id={bookId}
+        />
                     </Col>
                 </Row>
-            </Container>
+                </Container>
+                {/* <Container>
+                <Row>
+                <Col>
+                    <AddBook id={bookId} setBookId={setBookId} />
+                </Col>
+                </Row>
+            </Container> */}
 
 
             {/* <DoctorsList/> */}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {
     Form,
     Alert,
@@ -9,8 +9,11 @@ import {
 import BookDataService from "../services/book.services";
 import '../modal/addTask.css'
 import Modal from "../modal/Modal";
+import DoctorsList from "./DoctorsList";
 
-const AddBook = ({id, setBookId,onClose, open}) => {
+const AddBook = ({ id,setBookId,onClose, open}) => {
+
+    
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [status, setStatus] = useState("Available");
@@ -23,6 +26,10 @@ const AddBook = ({id, setBookId,onClose, open}) => {
     const [Phone, setPhone] = useState('');
     const [Schedule, setSchedule] = useState('');
     const [Specialization, setSpecialization] = useState('');
+    
+
+    console.log('IM iN ADDBOOK id in this', id)
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
@@ -31,8 +38,7 @@ const AddBook = ({id, setBookId,onClose, open}) => {
             return;
         }
         const newBook = {
-            title,
-            author,
+            
             status,
             name,
             Age,
@@ -42,12 +48,22 @@ const AddBook = ({id, setBookId,onClose, open}) => {
             Specialization
 
         };
-        console.log(newBook);
+        console.log('this is newBook from Addbook',newBook);
 
         try {
+            console.log('Im in AddBook  id=  ',id)
+            console.log('e target ',e.target.getBookId)
             if (id !== undefined && id !== "") {
+                console.log('FUNCTION UPDATE STARTED')
                 await BookDataService.updateBook(id, newBook);
                 setBookId("");
+                
+                setName("");
+                setAge("");
+                setLastName("");
+                setPhone("");
+                setSchedule("");
+                setSpecialization("");
                 setMessage({error: false, msg: "Updated successfully!"});
             } else {
                 await BookDataService.addBooks(newBook);
@@ -93,6 +109,7 @@ const AddBook = ({id, setBookId,onClose, open}) => {
             editHandler();
         }
     }, [id]);
+
     return (
         <>
          <Modal modalLable='Add Task' onClose={onClose} open={open}>

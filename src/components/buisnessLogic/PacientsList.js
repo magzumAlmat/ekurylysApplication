@@ -3,7 +3,7 @@ import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router";
 import {useUserAuth} from "../../context/UserAuthContext";
 import { Container, Navbar, Row, Col } from "react-bootstrap";
-
+import '../modal/taskManager.css'
 import {
     collection,
     doc,
@@ -25,12 +25,14 @@ import pacientServices from "../services/pacient.services.";
 import BooksList2 from './BooksList2'
 
 const PacientsList= () => {
-    
+  const [openAddModal, setOpenAddModal] = useState(false)
+      
   const [bookId, setBookId] = useState("");
 
     const getBookIdHandler = (id) => {
       console.log("The ID of document to be edited: ", id);
       setBookId(id);
+      console.log('PacientList BOOKID = ',bookId)
     };
 
 
@@ -47,24 +49,39 @@ const PacientsList= () => {
     return (
 
         <>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/><br/>
+            <div className='taskManager__container'>
+                <button onClick={
+                    () => setOpenAddModal(true)}>
+                    Добавить Пациента
+                </button>
+            </div>
+       
+       {
+            openAddModal && <AddPacient id={bookId}
+                setBookId={setBookId}
+                onClose={
+                    () => setOpenAddModal(false)
+                }
+                open={openAddModal}/>
+        }
+     
 
-        <br/>
-        <Container style={{ width: "400px" }}>
+        {/* <Container style={{ width: "400px" }}>
         <Row>
           <Col>
-            <AddPacient id={bookId} setBookId={setBookId} />
+          <button onClick={
+                    () => setOpenAddModal(true)
+                }>
+                    Добавить Пациента
+                </button>
           </Col>
         </Row>
       </Container>
+   */}
       <Container>
         <Row>
           <Col>
-            <BooksList2 getBookId={getBookIdHandler} />
+            <BooksList2 getBookId={getBookIdHandler} id={bookId} />
           </Col>
         </Row>
       </Container>

@@ -2,16 +2,35 @@ import React, {useEffect, useState} from "react";
 import {Table, Button} from "react-bootstrap";
 import BookDataService from "../services/book.services";
 import AddBook from "./AddBook";
+import { db } from "../../firebase";
+import {collection, query, orderBy, onSnapshot, updateDoc} from "firebase/firestore"
+import {useParams} from 'react-router-dom'
 const BooksList = ({getBookId}) => {
-    const [books, setBooks] = useState([]);
-    const [bookId, setBookId] = useState("");
+    
 
+    const [books, setBooks] = useState([]);
+    const [bookId, setBookId] = useState();
     const [openAddModal, setOpenAddModal] = useState(false)
+    
     useEffect(() => {
         getBooks();
     }, []);
 
-    const getBooks = async () => {
+    // useEffect(() => {
+    //   const taskColRef = query(collection(db, 'doctorsList'))
+    //   onSnapshot(taskColRef, (snapshot) => {
+    //     getBooks(snapshot.docs.map(doc => ({
+    //       id: doc.id,
+    //       data: doc.data()
+    //     })))})
+    // },[])
+    const getBookIdHandler = (getBookId) => {
+        console.log("The ID of document to be edited: ", getBookId);
+        setBookId(getBookId);
+    };
+
+
+    const getBooks = async (id) => {
         const data = await BookDataService.getAllBooks();
         console.log(data.docs);
         setBooks(data.docs.map((doc) => ({
@@ -20,19 +39,18 @@ const BooksList = ({getBookId}) => {
         })));
     };
 
+  
     const deleteHandler = async (id) => {
         await BookDataService.deleteBook(id);
         getBooks();
     };
     return (<> {
-        openAddModal && <AddBook id={bookId}
-            setBookId={setBookId}
-            onClose={
-                () => setOpenAddModal(false)
-            }
-            open={openAddModal}/>
-    }
-
+        openAddModal && 
+        <AddBook id={bookId}
+                 setBookId={setBookId}
+                 onClose={ () => setOpenAddModal(false)}
+                 open={openAddModal}/>
+        }
 
         <div className="mb-2">
             <Button variant="dark edit"
@@ -48,7 +66,6 @@ const BooksList = ({getBookId}) => {
             <th>Book Title</th>
             <th>Book Author</th>
             <th>Status</th> */}
-
                     <th>Name</th>
                     <th>Last name</th>
                     <th>Age</th>
@@ -56,8 +73,6 @@ const BooksList = ({getBookId}) => {
                     <th>Schedule</th>
                     <th>Specialization</th>
                     <th>Status</th>
-
-
                 </tr>
             </thead>
             <tbody> {
@@ -94,10 +109,15 @@ const BooksList = ({getBookId}) => {
                             <td>
                                 <Button variant="secondary" className="edit"
                                     onClick={
-                                        (e) => (getBookId(doc.id), setOpenAddModal(true))
+                                        (e) => (getBookId(doc.id), 
+                                        setOpenAddModal(true),
+                                        getBookIdHandler(doc.id)
+                                        )
+                                        
                                 }>
                                     Edit
                                 </Button>
+
                                 <Button variant="danger" className="delete"
                                     onClick={
                                         (e) => deleteHandler(doc.id)

@@ -2,13 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
 // import BookDataService from "./services/book.services";
 import pacientServices from "../services/pacient.services.";
-const BooksList = ({ getBookId }) => {
+import AddPacient from "./AddPacient";
+
+const BooksList2 = ({ getBookId }) => {
   const [books, setBooks] = useState([]);
+  const [bookId, setBookId] = useState("");
   useEffect(() => {
     getBooks();
   }, []);
 
+  const [openAddModal, setOpenAddModal] = useState(false)
+    useEffect(() => {
+        getBooks();
+    }, []);
+    
+    const getBookIdHandler = (getBookId) => {
+      console.log("The ID of document to be edited: ", getBookId);
+      setBookId(getBookId);
+  };
+
   const getBooks = async () => {
+    console.log('this is hetBookID',getBookId)
     const data = await pacientServices.getAllBooks();
     console.log(data.docs);
     setBooks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -20,6 +34,13 @@ const BooksList = ({ getBookId }) => {
   };
   return (
     <>
+    {openAddModal && <AddPacient id={bookId} 
+            setBookId={setBookId}
+            onClose={
+                () => setOpenAddModal(false)
+            }
+            open={openAddModal}/>
+    }
       <div className="mb-2">
         <Button variant="dark edit" onClick={getBooks}>
           Refresh List
@@ -40,6 +61,8 @@ const BooksList = ({ getBookId }) => {
             <th>Age</th>
             <th>Phone</th>
             <th>Address</th>
+            <th>Doctor choise</th>
+            <th>Order time</th>
           
             
             
@@ -53,18 +76,21 @@ const BooksList = ({ getBookId }) => {
                 <td>{doc.title}</td>
                 <td>{doc.author}</td>
                 <td>{doc.status}</td> */}
-                <td>{doc.name}</td>
+                <td>{doc.Name}</td>
                 <td>{doc.LastName}</td>
                 <td>{doc.Age}</td>
                 <td>{doc.Phone}</td>
                 <td>{doc.Address}</td>
+                <td>{doc.zayavka}</td>
+                <td>{doc.zayavkaTime}</td>
               
                 <td>
-                  <Button
-                    variant="secondary"
-                    className="edit"
-                    onClick={(e) => getBookId(doc.id)}
-                  >
+                <Button variant="secondary" className="edit"
+                  onClick={(e) => (getBookId(doc.id),
+                                   setOpenAddModal(true),
+                                   getBookIdHandler(doc.id))
+                                }>
+                                  
                     Edit
                   </Button>
                   <Button
@@ -84,4 +110,4 @@ const BooksList = ({ getBookId }) => {
   );
 };
 
-export default BooksList;
+export default BooksList2;
