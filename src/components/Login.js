@@ -36,7 +36,7 @@ const Login = () => {
   return (
     <>
       <div className="p-4 box">
-        <h2 className="mb-3">Firebase Auth Login</h2>
+        <h2 className="mb-3">Авторизация</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -62,7 +62,7 @@ const Login = () => {
           </div>
         </Form>
         <hr />
-        <div>
+        {/* <div>
           <GoogleButton
             className="g-btn"
             type="dark"
@@ -75,7 +75,7 @@ const Login = () => {
               Sign in with Phone
             </Button>
           </div>
-        </Link>
+        </Link> */}
       </div>
       <div className="p-4 box mt-3 text-center">
         Don't have an account? <Link to="/signup">Sign up</Link>

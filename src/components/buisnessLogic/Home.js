@@ -50,10 +50,6 @@ const Home = () => {
         }
     };
 
-
- 
-    
-    
     // const uid = signedInUser.uid;
     // console.log(uid)
     
@@ -98,10 +94,10 @@ const Home = () => {
                 {/*   <NavLink to="/buisnessLogic/DoctorsList">
                     Doctors List
                 </NavLink> */}
-               
-                <NavLink to="/buisnessLogic/PacientsList">
+               <PacientsList/>
+                {/* <NavLink to="/buisnessLogic/PacientsList">
                     Заявки
-                </NavLink>
+                </NavLink> */}
                 <br />
                 {/* <NavLink to="/buisnessLogic/RegisterOrderList">
                     Register Order List
@@ -116,10 +112,8 @@ const Home = () => {
         {/* <DoctorsList/> */}
 
             <div className="p-4 box mt-3 text-center">
-                Hello {
-                    
-                }
-                <br/> {
+              
+                <br/> Ваш email: {
                 user && user.email
             } </div>
             <div className="d-grid gap-2">

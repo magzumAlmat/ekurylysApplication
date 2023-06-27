@@ -210,11 +210,16 @@ const PacientsList = ({getBookId,id}) => {
                     Add pacient
             </NavLink> */}
 
+          <div className="mb-2">
+          <h6>Здравствуйте, {THISUSER} </h6>
+          </div>
+          <br />
         <div className="mb-2">
-            <Button variant="dark edit"
+            <Button variant="" className="btn-primary"
                 onClick={getBooks}>
                 Обновить заявки
             </Button>
+           
         </div>
 
         {/* <pre>{JSON.stringify(books, undefined, 2)}</pre>} */}
@@ -232,7 +237,7 @@ const PacientsList = ({getBookId,id}) => {
                     <th>Время заявки</th>
                     <th>
                     <Dropdown>
-                <Dropdown.Toggle variant="primary" id="statusFilterDropdown">
+                <Dropdown.Toggle variant="primary" id="statusFilterDropdown" className="btn btn-secondary dropdown-toggle">
                   Статус: {selectedStatus}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
@@ -246,7 +251,7 @@ const PacientsList = ({getBookId,id}) => {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
-                      Статус</th>
+                     </th>
 
                     <th>Редактировать запись</th>
                 </tr>
@@ -267,9 +272,11 @@ const PacientsList = ({getBookId,id}) => {
                             }</td> */}
                             <td>
                               
-                                {<Button size="sm"
+                                {<Button 
+                                    className="btn-primary"
+                                    size="sm"
                                     disabled={false}
-                                    variant="success"
+                                    variant=""
                                     onClick={() => {
                                     managedBy(doc.id,THISUSER);
                                     
