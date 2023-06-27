@@ -227,11 +227,27 @@ const PacientsList = ({getBookId,id}) => {
                     <th>БИН компании</th>
                     <th>ФИО </th>
                     <th>Наименование обьекта</th>
+                    <th>Срок строительства</th>
                     <th>Телефон</th>
                     <th>Время заявки</th>
                     <th>
-                   
-                        Статус</th>
+                    <Dropdown>
+                <Dropdown.Toggle variant="primary" id="statusFilterDropdown">
+                  Статус: {selectedStatus}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {statusOptions.map((option) => (
+                    <Dropdown.Item
+                      key={option}
+                      onClick={() => handleStatusFilter(option)}
+                    >
+                      {option}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+                      Статус</th>
+
                     <th>Редактировать запись</th>
                 </tr>
             </thead>
@@ -278,6 +294,7 @@ const PacientsList = ({getBookId,id}) => {
                             <td>{
                                 doc.objectName
                             }</td>
+                            <td>{doc.srokStroitelstva}</td>
                             <td>{
                                 doc.phone
                             }</td>
@@ -312,12 +329,12 @@ const PacientsList = ({getBookId,id}) => {
                   >
                     Завершено
                   </Button>
-                  <Button variant="danger" className="delete" size="sm"
+                  {/* <Button variant="danger" className="delete" size="sm"
                                     onClick={
                                         (e) => deleteHandler(doc.id)
                                 }>
                                     Delete
-                                </Button>
+                                </Button> */}
                 </ButtonGroup>
 
                               

@@ -58,29 +58,24 @@ const Home = () => {
     // console.log(uid)
     
     useEffect(() => {
-        const getUsername = async () => {
-          const signedInUser = auth.currentUser;
-          console.log(signedInUser)
-          if (signedInUser) {
-            const uid = signedInUser.uid;
-            try {
-              const userSnapshot = await db.collection("users").where("uid", "==", uid).get();
-              console.log(userSnapshot)
-              if (!userSnapshot.empty) {
-                const userDoc = userSnapshot.docs[0];
-                setUsername(userDoc.data().username);
-              }
-            } catch (error) {
-              console.error("Error getting user by UID:", error);
-            }
-          }
-        };
-    
-        getUsername();
-      
+       
+      getCurrentUserId()
       }, []);
         
-  
+      const getCurrentUserId = () => {
+        const user = auth.currentUser;
+        console.log('this is user= ',user)
+        if (user) {
+          const userId = user.uid;
+          
+          setUsername(user)
+          console.log("User UID====", userId);
+          return userId;
+        } else {
+          console.log("No user is currently signed in.");
+          return null;
+        }
+      };
 
     return (
 
@@ -89,7 +84,7 @@ const Home = () => {
 
             <nav>
                 <NavLink to="/Home">
-                    Home
+                    
                 </NavLink>
                 <br />
                 {/* <NavLink to="/buisnessLogic/AddPacient">

@@ -150,7 +150,7 @@ def send_welcome(message):
     bot.register_next_step_handler(message, send_companyName)
 
 def send_companyName(message):
-    bot.reply_to(message, ", Введите название компании")
+    bot.reply_to(message, " Введите название компании")
     bot.register_next_step_handler(message, send_bin)
 
 
