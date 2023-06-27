@@ -3,10 +3,10 @@ import {useNavigate} from "react-router";
 import {useUserAuth} from "../../../src/context/UserAuthContext"
 import {
     collection,
-    doc,
+
     setDoc,
     addDoc,
-    updateDoc,
+
     deleteDoc,
     getDoc,
     getDocs,
@@ -14,6 +14,14 @@ import {
     query,
     Timestamp
 } from "firebase/firestore";
+import {
+
+   
+    orderBy,
+    onSnapshot,
+    doc,
+    updateDoc,
+  } from "firebase/firestore";
 import {db} from '../../firebase';
 import {Routes, Route, Outlet, NavLink} from 'react-router-dom';
 
@@ -102,7 +110,7 @@ function AddDoctor(props) {
             
 
             <br/><br/>
-            <p>--------------------exit------------------------------------------------</p>
+           
 
         </>
     )

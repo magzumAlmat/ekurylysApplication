@@ -19,7 +19,7 @@ const AddBook = ({ id,setBookId,onClose, open}) => {
     const [status, setStatus] = useState("Available");
     const [flag, setFlag] = useState(true);
     const [message, setMessage] = useState({error: false, msg: ""});
-    const [name, setName] = useState("")
+    const [Name, setName] = useState("")
     const [Age, setAge] = useState('');
     const [LastName, setLastName] = useState('');
 
@@ -33,14 +33,14 @@ const AddBook = ({ id,setBookId,onClose, open}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
-        if (name === "" || LastName === "") {
+        if (Name === "" || LastName === "") {
             setMessage({error: true, msg: "Заполните Имя и Фамилию"});
             return;
         }
         const newBook = {
             
             status,
-            name,
+            Name,
             Age,
             LastName,
             Phone,
@@ -162,7 +162,7 @@ const AddBook = ({ id,setBookId,onClose, open}) => {
                         <InputGroup>
                             <InputGroup.Text id="formBookName">set Name</InputGroup.Text>
                             <Form.Control type="text" placeholder="Name"
-                                value={name}
+                                value={Name}
                                 onChange={
                                     (e) => setName(e.target.value)
                                 }/>

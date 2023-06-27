@@ -9,7 +9,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-
+const managersCollectionRef = collection(db, "users");
 const bookCollectionRef = collection(db, "pacients");
 const bookCollectionRefDoctors = collection(db, "doctorsList");
 
@@ -31,8 +31,11 @@ class PacientDataService {
   getAllBooks = () => {
     return getDocs(bookCollectionRef);
   };
-
-  getAllDctors = () => {
+  getAllM = () => {
+    return getDocs(managersCollectionRef);
+  };
+  
+  getAllDcotors = () => {
     return getDocs(bookCollectionRefDoctors);
   };
 

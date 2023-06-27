@@ -19,10 +19,11 @@ import {
 } from "firebase/firestore";
 import {db} from '../../firebase';
 import {Routes, Route, Outlet, NavLink} from 'react-router-dom';
-import AddPacient from "./AddPacient";
 import AddBook from "./AddBook";
-import bookServices from "../services/book.services";
+import PacientDataService  from '../services/pacient.services' 
 import BooksList from './BooksList'
+import PacientsList from "./PacientsList";
+import AddPacient from "./AddPacient";
 
 const DoctorsList = () => {
     const [openAddModal, setOpenAddModal] = useState(false)
@@ -71,14 +72,46 @@ const DoctorsList = () => {
             <Container>
                   
 
-
+{/* 
                 <Row>
                     <Col>
                         <BooksList getBookId={getBookIdHandler} id={bookId}
         />
                     </Col>
-                </Row>
+                </Row> */}
                 </Container>
+
+                <br />
+                <br />
+                {/* <div className='taskManager__container'>
+                <button onClick={
+                    () => setOpenAddModal(true)}>
+                    Добавить Пациента
+                </button>
+            </div> */}
+
+        {
+            openAddModal && <AddPacient
+                id={bookId}
+                setBookId={setBookId}
+                onClose={
+                    () => setOpenAddModal(false)
+                }
+                open={openAddModal}/>
+                
+        } 
+
+                <Container>
+                  
+
+
+                  <Row>
+                      <Col>
+                          <PacientsList getBookId={getBookIdHandler} id={bookId}
+          />
+                      </Col>
+                  </Row>
+                  </Container>
                 {/* <Container>
                 <Row>
                 <Col>

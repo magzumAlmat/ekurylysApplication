@@ -10,10 +10,16 @@ import { UserAuthContextProvider } from "./context/UserAuthContext";
 import {db} from './firebase'
 import {collection, addDoc, Timestamp} from 'firebase/firestore'
 import Home from "./components/buisnessLogic/Home";
-import AddPacient from "./components/buisnessLogic/AddPacient";
+// import AddPacient from "./components/buisnessLogic/AddPacient";
 import AddDoctor from './components/buisnessLogic/AddDoctor'
 import DoctorsList from "./components/buisnessLogic/DoctorsList";
+import AddRegisterOrder from "./components/buisnessLogic/AddRegisterOrder";
+import RegisterOrderList from "./components/buisnessLogic/RegisterOrderList";
+import AddPacient from "./components/buisnessLogic/AddPacient";
 import PacientsList from "./components/buisnessLogic/PacientsList";
+// import PacientsList from "./components/buisnessLogic/PacientsList";
+
+// import NewPacient from "./components/buisnessLogic/AddPacient";
 function App() {
   const [bookId, setBookId] = useState("");
 
@@ -42,10 +48,18 @@ function App() {
               <Route path="/phonesignup" element={<PhoneSignUp />} />
               
             
-              <Route path="/buisnessLogic/AddPacient" element={ <AddPacient/> } />
+              {/* <Route path="/buisnessLogic/AddPacient" element={ <AddPacient/> } />
+               */}
               <Route path="/buisnessLogic/AddDoctor" element={ <AddDoctor/> } />
               <Route path="/buisnessLogic/DoctorsList" element={ <DoctorsList/> } />
-              <Route path="/buisnessLogic/PacientsList" element={ <PacientsList/> } />
+              <Route path="/buisnessLogic/RegisterOrderList" element={ <RegisterOrderList/> } />
+              <Route path="/buisnessLogic/AddRegisterOrder" element={ <AddRegisterOrder/> } />
+              <Route path="/buisnessLogic/AddPacient" element={ <AddPacient/>}/>
+              <Route path="/buisnessLogic/PacientsList" element={ <PacientsList/>}/>
+              {/* {/* <Route path="/buisnessLogic/PacientsList" element={ <PacientsList/> } /> */}
+             
+              {/* <Route path="/buisnessLogic/NewPacient" element={ <NewPacient/> } /> */}
+
 
             </Routes>
           </UserAuthContextProvider>
