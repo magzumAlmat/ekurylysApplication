@@ -120,7 +120,7 @@ bot = telebot.TeleBot(TOKEN)
 gMessage=''
 #Define the handler for the /start command
 
-def AddRecord(companyNameMessage,binMessage,fioMessage,telMessage,objectNameMessage,status):
+def AddRecord(companyNameMessage,binMessage,fioMessage,telMessage,objectNameMessage,status,srokStroitelstva):
     # print('Данные в функции Addrecord',binMessage.text,fioMessage.text,telMessage.text,objectNameMessage.text,status)
     try:
         zayavkaTime = datetime.now()
@@ -136,6 +136,7 @@ def AddRecord(companyNameMessage,binMessage,fioMessage,telMessage,objectNameMess
           'status':str(status),
           'zayavkaTime':zayavkaTime,
           'manager':'',
+          'srokStroitelstva':str(srokStroitelstva.text)
           }
     db.collection('pacients').add(data)
     
@@ -150,7 +151,7 @@ def send_welcome(message):
     bot.register_next_step_handler(message, send_companyName)
 
 def send_companyName(message):
-    bot.reply_to(message, " Введите название компании")
+    bot.reply_to(message, ", Введите название компании")
     bot.register_next_step_handler(message, send_bin)
 
 
@@ -192,20 +193,29 @@ def send_obj(message):
     
     bot.reply_to(message, "Введите название Объекта")
     
+    bot.register_next_step_handler(message, send_time)
+
+def send_time(message):
+    
+    global objectNameMessage
+    objectNameMessage = message
+    
+    bot.reply_to(message, "Введите срок строительства объекта")
+    
     bot.register_next_step_handler(message, process_address_step)
 
 
 def process_address_step(message):
     print('ЯВНУТРИ ПОСЛЕДНЕЙ ФУНКЦИИ',message.text)
-    global objectNameMessage
-    objectNameMessage = message
+    global srokStroitelstva
+    srokStroitelstva= message
     # Send a confirmation message to the user with all the details
     # bot.reply_to(gMessage, "Thank you! Here are your details:\nName: "  + "\nPhone: " + telMessage + "\nAddress: " + gMessage + "\nDoctor: " + + "\nTime: " + objectNameMessage )
     bot.reply_to(message,"Спасибо мы приняли вашу заявку !")
     
     status='inProgress'
 
-    AddRecord(companyNameMessage,binMessage,fioMessage,telMessage,objectNameMessage,status)
+    AddRecord(companyNameMessage,binMessage,fioMessage,telMessage,objectNameMessage,status,srokStroitelstva)
 
     
   

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router";
-import {useUserAuth} from "../../../src/context/UserAuthContext"
+import {useUserAuth} from "../../context/UserAuthContext"
 import {
     collection,
 
