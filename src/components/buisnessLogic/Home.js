@@ -76,8 +76,6 @@ const Home = () => {
     return (
 
         <>
-       
-
             <nav>
                 <NavLink to="/Home">
                     
